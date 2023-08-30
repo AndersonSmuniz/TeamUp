@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nome');
             $table->string('apelido')->unique();
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('senha');
             $table->rememberToken();
             $table->string('celular')->nullable();

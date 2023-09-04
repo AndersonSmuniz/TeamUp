@@ -12,7 +12,6 @@ class UsuarioController extends Controller
 {
     public function store(StoreUsuarioRequest $request)
     {
-
         $usuario = new Usuario();
         $usuario->nome = $request->input('nome');
         $usuario->apelido = $request->input('apelido');
@@ -39,5 +38,9 @@ class UsuarioController extends Controller
         return Usuario::findOrFail($id);
     }
 
+    public function destroy($id)
+    {
+        return true;
+    }
 
 }

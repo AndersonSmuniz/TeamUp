@@ -21,24 +21,6 @@ class Usuario extends Model
         'midia_social',
     ];
 
-    public static $rules = [
-        'nome' => 'required|string|max:255',
-        'apelido' => 'required|string|max:50|unique:usuarios',
-        'email' => 'required|email|unique:usuarios',
-        'senha' => 'required|min:6',
-        'celular' => 'nullable',
-        'tipo_usuario_id' => 'required|exists:tipo_usuarios,id',
-        'midia_social' => 'nullable|string|max:255',
-    ];
-
-    public static $messages = [
-        'required' => 'O campo :attribute é obrigatório.',
-        'email' => 'O campo :attribute deve ser um endereço de e-mail válido.',
-        'unique' => 'O :attribute já está em uso.',
-        'senha.min' => 'A senha deve ter no mínimo :min caracteres.',
-        'exists' => 'O :attribute selecionado é inválido.',
-    ];
-
     protected $hidden = [
         'senha',
         'remember_token',

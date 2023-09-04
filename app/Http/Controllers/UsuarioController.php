@@ -33,4 +33,11 @@ class UsuarioController extends Controller
 
         return response()->json($usuarios);
     }
+
+    public function show($id)
+    {
+        return Usuario::findOrFail($id);
+    }
+
+
 }

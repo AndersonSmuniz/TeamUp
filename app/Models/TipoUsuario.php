@@ -18,14 +18,4 @@ class TipoUsuario extends Model
         return $this->hasMany(Usuario::class, 'tipo_usuario_id');
     }
 
-
-    public static function administradorId()
-    {
-        return self::where('nome', 'Administrador')->value('id');
-    }
-
-    public static function usuarioComumId()
-    {
-        return self::where('nome', 'Usuário Comum')->value('id');
-    }
 }

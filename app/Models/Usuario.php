@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class Usuario extends Model
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
     protected $table = 'usuarios';
 
@@ -31,18 +32,6 @@ class Usuario extends Model
         return $this->belongsTo(TipoUsuario::class, 'tipo_usuario_id');
     }
 
-    //tipo de usuário fixo durante a criação
-    //função boot() chamada na criação de um novo usuario
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($usuario) {
-            if (!$usuario->tipo_usuario_id) {
-                $usuario->tipo_usuario_id = TipoUsuario::usuarioComumId();
-            }
-        });
-    }
 
     public function cartas()
     {

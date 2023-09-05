@@ -2,10 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsuarioController;
+use \App\Http\Controllers\Api\V1\UsuarioController;
 
 
+Route::prefix('V1')->group(function (){
 
-Route::apiResource('usuarios', UsuarioController::class);
+    Route::apiResource('usuarios', UsuarioController::class);
 
-Route::post('/usuarios/criar', [UsuarioController::class, 'store'])->name('criar_usuario');
+});
+

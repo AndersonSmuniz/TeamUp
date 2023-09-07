@@ -15,11 +15,11 @@ class TipoPontuacao extends Model
         'posicao',
         'valor_pontuacao',
         'nome_pontuacao',
-        'id_esporte',
+        'esporte_id',
     ];
 
     public function esporte()
     {
-        return $this->belongsTo(Esporte::class, 'id_esporte');
+        return $this->belongsTo(Esporte::class, 'esporte_id');
     }
 }

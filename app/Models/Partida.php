@@ -14,7 +14,6 @@ class Partida extends Model
     protected $fillable = [
         'esporte_id',
         'usuario_juiz_id',
-        'time_id',
         'usuario_id',
     ];
 
@@ -30,7 +29,7 @@ class Partida extends Model
 
     public function times()
     {
-        return $this->belongsToMany(Time::class, 'partida_times', 'partida_id', 'time_id');
+        return $this->belongsToMany(Time::class, 'partida_time');
     }
 
     public function usuario()
@@ -41,6 +40,10 @@ class Partida extends Model
     public function resultado()
     {
         return $this->hasOne(Resultado::class, 'partida_id');
+    }
+    public function partida_times()
+    {
+        return $this->hasMany(PartidaTime::class);
     }
 
 }

@@ -14,7 +14,6 @@ class Time extends Model
     protected $fillable = [
         'nome',
         'quantidade_jogadores',
-        'usuario_time_id',
     ];
 
     //um-para-muitos
@@ -23,10 +22,14 @@ class Time extends Model
         return $this->hasMany(UsuarioTime::class, 'time_id');
     }
 
-    //muitos-para-muitos
     public function partidas()
     {
-        return $this->belongsToMany(Partida::class, 'partida_times', 'time_id', 'partida_id');
+        return $this->belongsToMany(Partida::class, 'partida_time');
+    }
+
+    public function partida_times()
+    {
+        return $this->hasMany(PartidaTime::class);
     }
 
 }

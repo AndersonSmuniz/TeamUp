@@ -14,7 +14,7 @@ class Estatistica extends Model
     protected $fillable = [
         'pontos',
         'usuario_time_id',
-        'nome',
+        'tipo_pontuacao_id',
     ];
 
     public function usuarioTime()

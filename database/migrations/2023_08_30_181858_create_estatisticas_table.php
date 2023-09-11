@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('estatisticas', function (Blueprint $table) {
             $table->id();
             $table->integer('pontos');
-            $table->string('nome');
+            $table->integer('tipo_pontuacao_id');
             $table->timestamps();
         });
     }

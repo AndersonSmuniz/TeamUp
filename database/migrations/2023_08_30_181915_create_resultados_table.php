@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('resultados', function (Blueprint $table) {
             $table->id();
-            $table->integer('placar');
-            $table->string('vencedor');
-            $table->string('perdedor');
+            $table->integer('placar')->nullable();
+            $table->string('vencedor')->nullable();
+            $table->string('perdedor')->nullable();
             $table->foreignId('partida_id')->constrained('partidas');
             $table->timestamps();
         });

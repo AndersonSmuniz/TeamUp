@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class TipoUsuarioSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         DB::table('tipo_usuarios')->insert([
             ['nome' => 'Administrador'],

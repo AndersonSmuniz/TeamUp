@@ -7,7 +7,9 @@ use App\Http\Resources\V1\EsporteResource;
 use App\Models\Esporte;
 use App\Models\Usuario;
 use App\Traits\HttpResponses;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -17,7 +19,10 @@ class EsporteController extends Controller
 
     public function index()
     {
-        return EsporteResource::collection(Esporte::all());
+        if(Auth::user()->tipo_usuario_id == 1){
+            return EsporteResource::collection(Esporte::all());
+        }
+        return EsporteResource::collection(Esporte::where('status', 'on')->get());
     }
 
     public function store(Request $request)

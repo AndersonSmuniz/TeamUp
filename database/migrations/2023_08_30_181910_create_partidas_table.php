@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('esporte_id')->constrained('esportes');
             $table->foreignId('usuario_juiz_id')->constrained('usuarios');
             $table->foreignId('usuario_id')->constrained('usuarios');
+            $table->boolean('finalizada');
             $table->timestamps();
         });
     }

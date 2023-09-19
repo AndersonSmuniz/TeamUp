@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tipo_pontuacao', function (Blueprint $table) {
             $table->id();
             $table->string('posicao');
+            $table->boolean('pontuacao_placar');
             $table->integer('valor_pontuacao');
             $table->string('nome_pontuacao');
             $table->foreignId('esporte_id')->constrained('esportes');

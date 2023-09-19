@@ -8,6 +8,7 @@ use \App\Http\Controllers\Api\V1\TipoPontuacaoController;
 use \App\Http\Controllers\AuthController;
 use \App\Http\Controllers\Api\V1\CartaController;
 use \App\Http\Controllers\Api\V1\PartidaController;
+use \App\Http\Controllers\Api\V1\PontuacaoController;
 
 
 Route::prefix('V1')->group(function (){
@@ -39,7 +40,9 @@ Route::prefix('V1')->group(function (){
 
         Route::apiResource('partida', PartidaController::class);
         Route::post('partida/{partida}/entrar', [PartidaController::class,'entrar'])->name('partida.entrar');
+        Route::post('partida/{partida}/finalizar',[PartidaController::class, 'finalizarPartida'])->name('partida.ficalizarPartida');
 
+        Route::put('partida/{partida}/ponto', [PontuacaoController::class,'addPontuacao'])->name('partida.addPontuacao');
     });
 });
 

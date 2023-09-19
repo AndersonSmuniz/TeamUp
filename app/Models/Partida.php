@@ -15,6 +15,7 @@ class Partida extends Model
         'esporte_id',
         'usuario_juiz_id',
         'usuario_id',
+        'finalizada'
     ];
 
     public function esporte()

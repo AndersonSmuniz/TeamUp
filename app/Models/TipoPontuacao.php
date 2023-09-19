@@ -13,6 +13,7 @@ class TipoPontuacao extends Model
 
     protected $fillable = [
         'posicao',
+        'pontuacao_placar',
         'valor_pontuacao',
         'nome_pontuacao',
         'esporte_id',

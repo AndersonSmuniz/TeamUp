@@ -35,9 +35,9 @@ class TipoPontuacaoController extends Controller
         if ($esporte) {
             $validator = Validator::make($request->all(), [
                 'posicao' => 'required|string|max:50',
+                'pontuacao_placar' => 'required|boolean',
                 'nome_pontuacao' => 'required|string|max:50',
                 'valor_pontuacao' => 'required|integer',
-                'esporte_id' => 'required|exists:esportes,id'
             ]);
 
             if ($validator->fails()) {
@@ -48,9 +48,10 @@ class TipoPontuacaoController extends Controller
 
             $tipo_pontuacao = TipoPontuacao::create([
                 'posicao' => $data['posicao'],
+                'pontuacao_placar' => $data['pontuacao_placar'],
                 'valor_pontuacao' => $data['valor_pontuacao'],
                 'nome_pontuacao' => $data['nome_pontuacao'],
-                'esporte_id' => $data['esporte_id'],
+                'esporte_id' => $esporte->id,
             ]);
 
             return $tipo_pontuacao ? $this->response('Tipo_pontuacao Cadastrado', 201, new TipoPontuacaoResource($tipo_pontuacao))
@@ -83,17 +84,18 @@ class TipoPontuacaoController extends Controller
 
     public function update(Request $request, Esporte $esporte, string $id)
     {
-        if($esporte){
+        if ($esporte) {
             $validator = Validator::make($request->all(), [
                 'posicao' => 'required|string|max:50',
+                'pontuacao_placar' => 'required|boolean',
                 'nome_pontuacao' => 'required|string|max:50',
                 'valor_pontuacao' => 'required|integer',
-                'esporte_id' => 'required|exists:esportes,id'
             ]);
 
             if ($validator->fails()) {
                 return $this->error('Dados Invalidos', 422, $validator->errors());
             }
+
 
             $data = $validator->validated();
 
@@ -101,9 +103,10 @@ class TipoPontuacaoController extends Controller
 
             $tipo_pontuacao = $updateTipo_usuario->Update([
                 'posicao' => $data['posicao'],
+                'pontuacao_placar' => $data['pontuacao_placar'],
                 'valor_pontuacao' => $data['valor_pontuacao'],
                 'nome_pontuacao' => $data['nome_pontuacao'],
-                'esporte_id' => $data['esporte_id'],
+                'esporte_id' => $esporte->id,
             ]);
 
             return $tipo_pontuacao ? $this->response('Tipo_pontuacao Atualizado', 201, new TipoPontuacaoResource($updateTipo_usuario))

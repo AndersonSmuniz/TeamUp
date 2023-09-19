@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\PartidaResource;
+use App\Http\Resources\V1\ResultadoResource;
 use App\Http\Resources\V1\UsuarioTimeResource;
 use App\Models\Estatistica;
 use App\Models\Partida;
 use App\Models\Resultado;
 use App\Models\Time;
+use App\Models\TipoPontuacao;
 use App\Models\UsuarioTime;
 use App\Traits\HttpResponses;
 use http\Exception\BadMessageException;
@@ -46,6 +48,7 @@ class PartidaController extends Controller
             'esporte_id' => $data['esporte_id'],
             'usuario_id' => Auth::user()->id,
             'usuario_juiz_id' => Auth::user()->id,
+            'finalizada' => false,
         ]);
 
         $time1 = Time::create([
@@ -60,10 +63,14 @@ class PartidaController extends Controller
 
         $partida->times()->attach([$time1->id, $time2->id]);
 
+        $placarInicial = [
+            $time1->id => 0,
+            $time2->id => 0,
+        ];
+
         $resultado = Resultado::create([
             'partida_id' => $partida->id,
-            'placar' => 0,
-
+            'placar' => json_encode($placarInicial),
         ]);
 
         $partida->update(['resultado_id' => $resultado->id]);
@@ -95,25 +102,71 @@ class PartidaController extends Controller
             return $this->error('Você já está nesta partida', 400);
         } else {
 
-            $UsuarioTime = UsuarioTime::create([
+            $usuarioTime = UsuarioTime::create([
                 'usuario_id' => $usuario->id,
                 'posicao_partida' => $request['posicao_partida'],
                 'time_id' => $request['time_id']
             ]);
+
+            $usuarioTime_id = $usuarioTime->id;
+
+            $estatisticas = [];
+
+            $tiposPontuacao = TipoPontuacao::where('esporte_id', $partida->esporte_id)->get();
+
+            foreach ($tiposPontuacao as $tipoPontuacao) {
+                $estatisticas[] = [
+                    'usuario_time_id' => $usuarioTime_id,
+                    'tipo_pontuacao_id' => $tipoPontuacao->id,
+                    'pontos' => 0,
+                ];
+            }
+            Estatistica::insert($estatisticas);
         }
 
-        return $this->response('Você entrou na partida com sucesso', 200, new UsuarioTimeResource($UsuarioTime));
+        return $this->response('Você entrou na partida com sucesso', 200, new UsuarioTimeResource($usuarioTime));
+    }
+
+    public function finalizarPartida(Partida $partida)
+    {
+        $usuario = Auth::user()->id;
+
+        if ($usuario == $partida->usuario_juiz_id && !($partida->finalizada)) {
+            $resultado = Resultado::where('partida_id', $partida->id)->first();
+
+            if ($resultado) {
+                $placar = json_decode($resultado->placar, true); // Decodificando JSON
+
+                $timeIds = array_keys($placar);
+                $pontos = array_values($placar);
+
+                $vencedor = array_search(max($pontos), $pontos);
+                $perdedor = array_search(min($pontos), $pontos);
+
+                if ($vencedor !== false && $perdedor !== false) {
+                    $times = Time::whereIn('id', [$timeIds[$vencedor], $timeIds[$perdedor]])->get();
+                    if ($vencedor !== $perdedor) {
+                        $resultado->vencedor = $times[0]->nome;
+                        $resultado->perdedor = $times[1]->nome;
+                    }else{
+                        $resultado->vencedor = 'empate';
+                        $resultado->perdedor = 'empate';
+                    }
+                    $partida->finalizada = true;
+
+                    $partida->save();
+                    $resultado->save();
+                }
+                return $this->response('Partida finalizada', 200, new ResultadoResource($resultado));
+            }
+            return $this->response('Erro ao finalizar Partida', 400);
+        }
+        return $this->response('Só o juiz pode finalizar partida ou a partida já foi finalizada', 400);
     }
 
     public function show(string $id)
     {
         return new PartidaResource(Partida::where('id', $id)->first());
-    }
-
-
-    public function update(Request $request, string $id)
-    {
-
     }
 
     public function destroy(Partida $partida)

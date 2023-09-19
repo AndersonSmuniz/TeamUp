@@ -20,6 +20,7 @@ class PartidaResource extends JsonResource
             'esporte_id' => $this->esporte_id,
             'usuario_id' => $this->usuario_id,
             'usuario_juiz_id' => $this->usuario_juiz_id,
+            'finalizada' => $this->finalizada,
             'resultado' => new ResultadoResource($this->resultado),
             'times' => TimeResource::collection($this->times),
         ];
